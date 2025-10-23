@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>VibraSense – Silkworm Gender Predictor</title>
+  <style>
+    body { font-family: Arial; background-color: #f0f8ff; text-align: center; }
+    .container { width: 400px; margin: 50px auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 0 10px gray; }
+    input { width: 90%; margin: 8px 0; padding: 5px; text-transform: uppercase; }
+    button { padding: 8px 16px; border: none; background: #0078d4; color: white; border-radius: 5px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>VibraSense AI Gender Predictor</h2>
+    <input id="cocoon_size" type="number" placeholder="COCOON SIZE">
+    <input id="weight" type="number" placeholder="WEIGHT">
+    <input id="texture" type="number" placeholder="TEXTURE">
+    <input id="color_intensity" type="number" placeholder="COLOR INTENSITY">
+    <br>
+    <button onclick="predictGender()">Predict Gender</button>
+    <h3 id="result"></h3>
+  </div>
+
+  <script>
+    async function predictGender() {
+      const features = [
+        parseFloat(document.getElementById("cocoon_size").value),
+        parseFloat(document.getElementById("weight").value),
+        parseFloat(document.getElementById("texture").value),
+        parseFloat(document.getElementById("color_intensity").value)
+      ];
+
+      const response = await fetch("/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ features: features })
+      });
+
+      const data = await response.json();
+      const gender = data.result === 1 ? "Female" : "Male";
+      document.getElementById("result").innerText = "Predicted Gender: " + gender;
+    }
+  </script>
+</body>
+</html>
